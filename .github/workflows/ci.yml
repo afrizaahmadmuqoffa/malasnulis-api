@@ -1,0 +1,75 @@
+name: Continuous Integration
+ 
+on: 
+  pull_request:
+    branches:
+      - master
+ 
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+ 
+    strategy:
+      matrix:
+        node-version: ['18.x', '20.x']
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+   
+    services:
+      postgres:
+        image: postgres
+        env:
+         POSTGRES_USER: postgres
+         POSTGRES_PASSWORD: mysecretpassword
+         POSTGRES_DB: malasnulis
+         
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+ 
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run database migrations
+      run: npm run migrate:dev
+      env:
+        NODE_ENV: development
+        HOST: localhost
+        PORT: 8000
+        PGHOST: localhost
+        PGPORT: 5432
+        PGUSER: postgres
+        PGPASSWORD: mysecretpassword
+        PGDATABASE: malasnulis
+        ACCESS_TOKEN_KEY: secret
+        REFRESH_TOKEN_KEY: terces
+        ACCESS_TOKEN_AGE: 3600
+        REFRESH_TOKEN_AGE: 100000
+
+    - name: Check server can start
+      run: |
+        nohup node src/app.js &
+        sleep 5
+        kill $!
+      env:
+        NODE_ENV: development
+        HOST: localhost
+        PORT: 8000
+        PGHOST: localhost
+        PGPORT: 5432
+        PGUSER: postgres
+        PGPASSWORD: mysecretpassword
+        PGDATABASE: malasnulis
+        ACCESS_TOKEN_KEY: secret
+        REFRESH_TOKEN_KEY: terces
+        ACCESS_TOKEN_AGE: 3600
+        REFRESH_TOKEN_AGE: 100000

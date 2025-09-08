@@ -1,0 +1,35 @@
+{
+  "name": "copywritier-ai-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node src/app.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon src/app.js",
+    "migrate": "cross-env NODE_ENV=production node-pg-migrate",
+    "migrate:dev": "cross-env NODE_ENV=development node-pg-migrate -f config/database/test.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cross-env": "^10.0.0",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nanoid": "^3.3.11",
+    "nodemailer": "^7.0.6",
+    "pg": "^8.16.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "eslint": "^9.34.0",
+    "eslint-config-dicodingacademy": "^0.9.5",
+    "globals": "^16.3.0",
+    "node-pg-migrate": "^8.0.3",
+    "nodemon": "^3.1.10"
+  }
+}
