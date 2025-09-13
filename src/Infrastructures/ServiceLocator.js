@@ -21,8 +21,13 @@ const GetUserDetailUseCase = require('../Applications/use_case/GetUserDetailUseC
 const VerifyOtpUseCase = require('../Applications/use_case/VerifyOtpUseCase.js');
 const ResendOtpUseCase = require('../Applications/use_case/ResendOtpUseCase.js');
 const OtpRepositoryPostgres = require('./repository/OtpRepositoryPostgres.js');
-const NodemailerEmailSender = require('./mailSender/NodemailerMailSender.js');
+const BrevoEmailSender = require('./mailSender/BrevoMailSender.js');
 const VerifyResetPasswordUseCase = require('../Applications/use_case/VerifyResetPasswordUseCase.js');
+const GenerateContentUseCase = require('../Applications/use_case/GenerateContentUseCase.js');
+const FakeBedrock = require('./aiService/FakeBedrock.js');
+const ContentRepositoryPostgres = require('./repository/ContentRepositoryPostgres.js');
+const GetContentDetailUseCase = require('../Applications/use_case/GetContentDetailUseCase.js');
+
 
 const container = {};
 
@@ -31,10 +36,12 @@ const userRepository = new UserRepositoryPostgres(pool, nanoid);
 const authRepository = new AuthenticationRepositoryPostgres(pool);
 const otpRepository = new OtpRepositoryPostgres(pool, nanoid);
 const resetPasswordRepository = new ResetPasswordRepositoryPostgres(pool, nanoid);
+const contentRepository = new ContentRepositoryPostgres(pool, nanoid);
 const hasher = new BcryptHash(bcrypt);
 const tokenManager = new JwtTokenManager(jwt);
 const tokenGenerator = new CryptoEncryption(crypto);
-const mailSender = new NodemailerEmailSender();
+const mailSender = new BrevoEmailSender();
+const aiService = new FakeBedrock();
 
 
 // register use cases
@@ -95,6 +102,15 @@ container.resendOtpUseCase = new ResendOtpUseCase({
   otpRepository,
   tokenGenerator,
   mailSender,
+});
+
+container.generateContentUseCase = new GenerateContentUseCase({
+  aiService,
+  contentRepository,
+});
+
+container.getContentDetailUseCase = new GetContentDetailUseCase({
+  contentRepository
 });
 
 module.exports = container;

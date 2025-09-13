@@ -2,7 +2,7 @@
 exports.up = (pgm) => {
   pgm.createTable('otps', {
     id: {
-      type: 'VARCHAR(100)',
+      type: 'VARCHAR(50)',
       primaryKey: true
     },
     code: {

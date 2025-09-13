@@ -1,5 +1,6 @@
 const AuthenticationError = require('../../Commons/exceptions/AuthenticationError');
 const InvariantError = require('../../Commons/exceptions/InvariantError');
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const TooManyRequestError = require('../../Commons/exceptions/TooManyRequestError');
 const RegisteredUser = require('../../Domains/users/entities/RegisteredUser');
 
@@ -14,10 +15,11 @@ class VerifyOtpUseCase {
     if (!email || !code) throw new InvariantError('wajib menyertakan email dan kode otp');
     const userId = await this._userRepository.getIdByEmail(email);
     const user = await this._userRepository.getUserDetailById(userId);
+    if (!user) throw new NotFoundError('akun tidak ditemukan');
     if (user.is_verified === true) throw new InvariantError('akun anda telah terverifikasi');
 
     const otpUser = await this._otpRepository.getOtp(email);
-    if (!otpUser) throw new InvariantError('kode otp tidak ditemukan');
+    if (!otpUser) throw new NotFoundError('kode otp tidak ditemukan');
     if (otpUser.attempt >= 5) throw new TooManyRequestError('anda telah mencapai batas maksimal percobaan');
 
     const now = new Date();

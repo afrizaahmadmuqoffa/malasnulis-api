@@ -1,0 +1,39 @@
+/* eslint-disable camelcase */
+class ContentsHandler {
+  constructor(container) {
+    this._generateContentUseCase = container.generateContentUseCase;
+    this._getContentDetailUseCase = container.getContentDetailUseCase;
+
+    // bind handler method
+    this.postContentHandler = this.postContentHandler.bind(this);
+    this.getContentHandler = this.getContentHandler.bind(this);
+  }
+
+  async postContentHandler(req, res) {
+    const userId = req.user.id;
+    const payload = req.body;
+    const addedContent = await this._generateContentUseCase.execute({ user_id: userId, ...payload });
+    return res.status(201).json({
+      status: 'success',
+      data: {
+        addedContent
+      },
+    });
+  }
+
+  async getContentHandler(req, res) {
+    const userId = req.user.id;
+    const { id } = req.params;
+    console.log(id, userId);
+    const detailContent = await this._getContentDetailUseCase.execute({ user_id: userId, content_id: id });
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        detailContent
+      },
+    });
+  }
+
+}
+
+module.exports = ContentsHandler;

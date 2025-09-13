@@ -2,7 +2,7 @@
 exports.up = (pgm) => {
   pgm.createTable('reset_tokens', {
     id: {
-      type: 'VARCHAR(255)',
+      type: 'VARCHAR(50)',
       primaryKey: true,
     },
     token: {

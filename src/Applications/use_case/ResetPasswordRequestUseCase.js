@@ -22,7 +22,7 @@ class ResetPasswordRequestUseCase {
     const expiresAt = new Date(Date.now() + 1000 * 60 * 15); // 15 menit
 
     await this._resetPasswordRepository.saveResetToken({ email, token, expiresAt });
-    const resetLink = `${process.env.APP_URL}/api/reset-password/validate?token=${token}`;
+    const resetLink = `${process.env.APP_URL}/reset-password/validate?token=${token}`;
 
     await this._mailSender.send(
       email,
