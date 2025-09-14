@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
+require('../logger/sentryInstrument.js');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const rateLimiter = require('express-rate-limit');
 const Sentry = require('@sentry/node');
-const logger = require('../../Commons/logger/winstonLogger.js');
+const logger = require('../logger/winstonLogger.js');
 const usersRouter = require('../../Interfaces/http/api/users/router.js');
 const authRouter = require('../../Interfaces/http/api/authentications/router.js');
 const resetPasswordRouter = require('../../Interfaces/http/api/reset_password/router.js');
@@ -45,15 +46,9 @@ const createServer = (container) => {
   //sentry init
   Sentry.init({
     dsn: process.env.DSN,
+    sendDefaultPii: true,
     tracesSampleRate: 1.0,
   });
-
-  app.use(
-    Sentry.Handlers.requestHandler({
-      serverName: false,
-      user: ['email'],
-    })
-  );
 
   app.get('/', (req, res) => {
     res.send('Hello world!');
@@ -69,22 +64,13 @@ const createServer = (container) => {
   app.use('/api/reset-password', sensitiveLimiter, resetPasswordRouter(container));
   app.use('/api/contents', contentsRouter(container));
 
+  Sentry.setupExpressErrorHandler(app);
+
   swaggerDocs(app);
 
   app.use((req, res, next) => {
     throw new NotFoundError('route tidak ditemukan');
   });
-
-  app.use(
-    Sentry.Handlers.errorHandler({
-      shouldHandleError(error) {
-        if (error.status === 404 || error.status === 500) {
-          return true;
-        }
-        return false;
-      },
-    })
-  );
 
   app.use((err, req, res, next) => {
     res.statusCode = 500;
