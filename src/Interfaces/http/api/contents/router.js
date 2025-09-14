@@ -36,7 +36,7 @@ const ContentsHandler = require('./handler.js');
  *                 example: "formal"
  *               language:
  *                 type: string
- *                 example: "id"
+ *                 example: "indonesia"
  *               input_prompt:
  *                 type: string
  *                 example: "lorem ipsum dolor sit amet"

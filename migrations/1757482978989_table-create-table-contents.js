@@ -23,7 +23,7 @@ exports.up = (pgm) => {
       notNull: true,
     },
     language: {
-      type: 'VARCHAR(10)',
+      type: 'VARCHAR(50)',
       default: 'id'
     },
     input_prompt: {

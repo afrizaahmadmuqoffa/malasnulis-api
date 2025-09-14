@@ -47,7 +47,7 @@ const options = {
             platform: { type: 'string', example: 'facebook' },
             type: { type: 'string', example: 'full' },
             tone: { type: 'string', example: 'formal' },
-            language: { type: 'string', example: 'id' },
+            language: { type: 'string', example: 'indonesia' },
             input_prompt: { type: 'string', example: 'lorem ipsum dolor sit amet' },
             generated_content: {
               type: 'array',
