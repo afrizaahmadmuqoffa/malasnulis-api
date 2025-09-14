@@ -57,7 +57,6 @@ const ContentsHandler = require('./handler.js');
  *               status: "fail"
  *               message: "tidak dapat menambahkan konten karena properti yang dibutuhkan tidak ada"
  *
- * /contents/:
  *   get:
  *     summary: Ambil semua konten
  *     tags: [Contents]
@@ -178,7 +177,6 @@ const ContentsHandler = require('./handler.js');
  *               status: "fail"
  *               message: "konten tidak ditemukan"
  *
- * /contents/{id}:
  *   delete:
  *     summary: Hapus konten berdasarkan ID
  *     tags: [Contents]
