@@ -17,6 +17,7 @@ const swaggerDocs = require('../../Interfaces/http/docs/swagger.js');
 
 const createServer = (container) => {
   const app = express();
+  app.set('trust proxy', 1);
   app.use(express.json());
 
   // Security headers
@@ -71,12 +72,6 @@ const createServer = (container) => {
   app.use((req, res, next) => {
     throw new NotFoundError('route tidak ditemukan');
   });
-
-  app.use((err, req, res, next) => {
-    res.statusCode = 500;
-    res.end(`${res.sentry  }\n`); // `res.sentry` = ID error di GlitchTip
-  });
-
 
   // Centralized Error Handler
   app.use((err, req, res, next) => {
