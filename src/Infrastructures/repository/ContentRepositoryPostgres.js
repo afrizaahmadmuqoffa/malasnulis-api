@@ -43,6 +43,65 @@ class ContentRepositoryPostgres extends ContentRepository {
     return result.rows[0];
   }
 
+  async getAllContent({
+    user_id,
+    limit = 10,
+    page = 1,
+    sort_by = 'created_at',
+    order = 'DESC',
+    platform,
+    type,
+    tone,
+    language
+  }) {
+    const offset = (page - 1) * limit;
+
+    // base query
+    let text = `
+    SELECT id, platform, type, tone, language, input_prompt, generated_content, created_at
+    FROM contents
+    WHERE user_id = $1
+  `;
+    const values = [user_id];
+    let idx = 2;
+
+    // filter dinamis
+    if (platform) {
+      text += ` AND platform = $${idx++}`;
+      values.push(platform);
+    }
+    if (type) {
+      text += ` AND type = $${idx++}`;
+      values.push(type);
+    }
+    if (tone) {
+      text += ` AND tone = $${idx++}`;
+      values.push(tone);
+    }
+    if (language) {
+      text += ` AND language = $${idx++}`;
+      values.push(language);
+    }
+
+    // sort & pagination
+    text += ` ORDER BY ${sort_by} ${order} LIMIT $${idx++} OFFSET $${idx}`;
+    values.push(limit, offset);
+
+    const result = await this._pool.query({ text, values });
+    return result.rows;
+  }
+
+  async deleteContentById({ id, user_id }){
+    const query = {
+      text: 'DELETE FROM contents WHERE id = $1 AND user_id = $2 RETURNING id',
+      values: [id, user_id],
+    };
+
+    const result = await this._pool.query(query);
+
+    return result.rowCount > 0;
+  }
+
 }
 
 module.exports = ContentRepositoryPostgres;

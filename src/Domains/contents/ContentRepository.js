@@ -7,6 +7,14 @@ class ContentRepository {
   async getContentDetailById(id) {
     throw new Error('CONTENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+
+  async getAllContentById(id) {
+    throw new Error('CONTENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
+
+  async deleteContentById(id) {
+    throw new Error('CONTENT_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
 }
 
 module.exports = ContentRepository;

@@ -23,6 +23,7 @@ class BrevoEmailSender extends MailSender {
       };
       message.to = [{ email: to }];
 
+
       // Kirim email
       const res = await this._api.sendTransacEmail(message);
 

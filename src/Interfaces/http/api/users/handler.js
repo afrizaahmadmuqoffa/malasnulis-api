@@ -14,7 +14,6 @@ class UsersHandler {
 
   async postUserHandler(req, res) {
     const registeredUser = await this._addUserUseCase.execute(req.body);
-    console.log(registeredUser);
     return res.status(201).json({
       status: 'success',
       data: {
