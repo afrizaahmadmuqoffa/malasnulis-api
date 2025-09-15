@@ -27,6 +27,8 @@ const GenerateContentUseCase = require('../Applications/use_case/GenerateContent
 const FakeBedrock = require('./aiService/FakeBedrock.js');
 const ContentRepositoryPostgres = require('./repository/ContentRepositoryPostgres.js');
 const GetContentDetailUseCase = require('../Applications/use_case/GetContentDetailUseCase.js');
+const GetAllContentUseCase = require('../Applications/use_case/GetAllContentUseCase.js');
+const DeleteContentUseCase = require('../Applications/use_case/DeleteContentUseCase.js');
 
 
 const container = {};
@@ -111,6 +113,14 @@ container.generateContentUseCase = new GenerateContentUseCase({
 
 container.getContentDetailUseCase = new GetContentDetailUseCase({
   contentRepository
+});
+
+container.getAllContentUseCase = new GetAllContentUseCase({
+  contentRepository,
+});
+
+container.deleteContentUseCase = new DeleteContentUseCase({
+  contentRepository,
 });
 
 module.exports = container;

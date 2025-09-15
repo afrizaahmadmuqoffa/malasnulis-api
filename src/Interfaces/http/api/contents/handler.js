@@ -2,6 +2,7 @@
 class ContentsHandler {
   constructor(container) {
     this._generateContentUseCase = container.generateContentUseCase;
+    this._getAllContentUseCase = container.getAllContentUseCase;
     this._getContentDetailUseCase = container.getContentDetailUseCase;
     this._deleteContentUseCase = container.deleteContentUseCase;
 
@@ -37,7 +38,7 @@ class ContentsHandler {
       language,
     } = req.query;
 
-    const contents = await this._getContentDetailUseCase.execute({
+    const contents = await this._getAllContentUseCase.execute({
       user_id: userId,
       limit,
       page,
@@ -60,7 +61,7 @@ class ContentsHandler {
   async getContentHandler(req, res) {
     const userId = req.user.id;
     const { id } = req.params;
-    console.log(id, userId);
+
     const detailContent = await this._getContentDetailUseCase.execute({ user_id: userId, content_id: id });
     return res.status(200).json({
       status: 'success',
